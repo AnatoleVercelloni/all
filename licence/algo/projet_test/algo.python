@@ -1,0 +1,27 @@
+def m(s,i,V,starttime):
+	#if(i == 1 and s==1):
+		#print("Appel récursif s = " + str(s)+ " i = "+ str(i))
+    if (s == 0):
+        return 0;
+    if (i == 0):
+        return MAX
+    if (s < 0):
+        return MAX
+    else:
+        #print(timeit.default_timer() - starttime)
+        if (timeit.default_timer() - starttime>60):
+            print("trop long")
+            return 0
+        return min(m(s,i-1,V,starttime), (m(s-V[i-1],i,V,starttime)+1)) 
+
+def algo1(S,k,V):
+    starttime = timeit.default_timer()
+    res = MAX
+    for i in range(1,k+1) : 
+        #print(timeit.default_timer() - starttime)
+        if (timeit.default_timer() - starttime>60):
+            print("trop long")
+            break
+        #print("for indice = " + str(i))
+        res = min(res,m(S,i,V,starttime))
+    return res

@@ -1,0 +1,3829 @@
+{
+  "nickname": "28609740",
+  "exercises-editors": {
+    "btree_alt": [
+      1607767592.681,
+      "\n(* Q1 *)\nlet rec taille (ubt:'a ubtree) : int =\n  match ubt with\n    Empty2->0 \n  |Leaf x->1 \n  |Node2(g,x,d)-> 1+(taille g)+(taille d)\n  \n(* Q2 *)\nlet rec hauteur (ubt:'a ubtree) : int =\n  match ubt with\n    Empty2->0 \n  |Leaf x->1\n  |Node2(g,x,d)-> 1+(max (hauteur g)(hauteur d))\n\n(* Q3 *)\nlet rec leaves (ubt:'a ubtree) : 'a list =\n  match ubt with\n    Empty2->[]\n  |Leaf x->[x] \n  |Node2 (g,x,d) -> (leaves g)@(leaves d)\n  \n(* Q4 *)\nlet rec bt_to_ubt (bt:'a btree) : 'a ubtree =\n  match bt with\n    Empty->Empty2\n  |Node(x,Empty,Empty)->Leaf x\n  |Node(x,g,d)->Node2((bt_to_ubt g),x,(bt_to_ubt d))\n\n\n  \n\n\n\n  \n"
+    ],
+    "btree_init": [
+      1607693759.910698,
+      "\n\n(* Q1 *)\nlet rec hauteur (bt:'a btree) : int =\n  match bt with\n    Empty->0\n  |Node(x,g,d)->1+(max (hauteur g) (hauteur d))\n\n(* Q2 *)\nlet rec list_by_depth (bt:'a btree) (n:int) : 'a list =\n  match bt with\n    Empty->[]\n  |Node(x,g,d)->if n=0 then [x]\n      else (list_by_depth g (n-1))@(list_by_depth d (n-1))\n\n(* Q3 *)\nlet rec to_list (bt:'a btree) : 'a list =\n  match bt with\n    Empty -> []\n  |Node(x,g,d)-> x::((to_list g)@(to_list d))\n\n  \n\n\n\n  \n"
+    ],
+    "btree_search": [
+      1607697247.25807,
+      "(* Q1 *)\nlet rec lt_btree (bt:'a btree) (x:'a) : bool =\n  match bt with\n    Empty->true\n  |Node(y,g,d)->if y<x then (lt_btree g x)&&(lt_btree d x)\n      else false\n\n(* Q2 *)\nlet rec ge_btree (bt:'a btree) (x:'a) : bool =\n  match bt with\n    Empty -> true\n  |Node(y,g,d) -> if y>=x then (ge_btree g x)&&(ge_btree d x)\n      else false\n\n(* Q3 *)\nlet rec is_abr (bt:'a btree) : bool =\n  match bt with\n    Empty->true\n  |Node(x,g,d)->if (lt_btree g x)&&(ge_btree d x) then (is_abr g)&&(is_abr d)\n      else false\n\n(* Q4 *)\nlet rec mem (bt:'a btree) (x:'a) : bool =\n  match bt with\n    Empty->false\n  |Node(y,g,d)->if x=y then true \n      else if x<y then (mem g x)\n      else (mem d x)\n  \n"
+    ],
+    "list_iter": [
+      1607687342.0459,
+      "\n(* Q1 *)\nlet inverse_i (xs:int list) : float list = \n  let f (x:int):float =\n    if x=0 then 0.\n    else\n      1./.(float_of_int x)\n  in\n  (List.map f xs)\n\n(* Q2 *)\nlet list_sum_tuple (cs:(int*int) list) (s:int) : (int*int) list =\n  let f (x:(int*int)): bool=\n    let (a,b) = x in\n    (a+b>=s)\n  in\n  (List.filter f cs )\n\n(* Q3 *)\nlet parenthese (xs:string list) : string =\n  let f (x:string) (a:string):string=\n    \"(\"^x^\")\"^a\n  in\n  (List.fold_right f xs \"\")\n\n(* Q4 *)\nlet list_non_0 (nss:(int list) list) : (int list) list =\n  let f (xs:int list):bool=\n    not (List.mem 0 xs)\n  in\n  (List.filter f nss)\n\n(* Q5 *)\nlet dpoints (xs:int list) (a:int) (b:int) : (int*int) list =\n  let f (x:int):(int*int)=\n    (x,a*x+b) \n  in\n  (List.map f xs)\n\n(* Q6 *)\nlet prod_sum_tuple (cs:(int*int) list) : int =\n  let f (a:int) (x:(int*int)) =\n    let (x1,x2)=x in (x1+x2)*a\n  in\n  (List.fold_left f 1 cs)\n    \n\n\n  \n"
+    ],
+    "list_matching1": [
+      1606234458.096762,
+      "let len_eq_3 (xs:'a list) : bool =\n  match xs with\n    x::y::z::[ ] -> true \n  | _ ->false\n    \n\nlet len_ge_3 (xs:'a list) : bool =\n  match xs with\n    [ ] -> false\n  |x::[]->false\n  |x::y::[ ]->false\n  |x::y::ys->true \n  \nlet len_lt_3 (xs:'a list) : bool =\n  match xs with \n    [ ] -> true\n  |x::[]->true\n  |x::y::[ ]->true\n  |_->false\n    \nlet len_comp_3 (xs:'a list) : int =\n  let a = (len_ge_3 xs) in\n  match a with\n    false-> -1\n  |true->let b = (len_eq_3 xs) in\n      match b with\n        true->0\n      |false -> 1\n    \n\n  \n"
+    ],
+    "list_matching2": [
+      1606235470.530162,
+      "let snd (xs:'a list) : 'a =\n  match xs with\n    []-> raise Not_found\n  |x::[]->raise Not_found\n  |x::y::ys -> y\n    \nlet swap_hd_snd (xs:'a list) : 'a list =\n  match xs with \n    []-> xs\n  |x::[]->xs\n  |x::y::ys -> y::x::ys \n    \nlet hd_0 (xs:int list) : bool =\n  match xs with\n    []->false\n  |x::ys-> x = 0\n    \nlet eq_hd (x:'a) (xs:'a list) : bool =\n  match xs with \n    []->false\n  |y::ys -> y = x\n     \n    \n\n  \n"
+    ],
+    "list_matching3": [
+      1606236223.441602,
+      "    \nlet hd_fst (xs:('a*'b) list) : 'a =\n  match xs with\n    []-> raise Not_found\n  |x::ys -> let (a,b) = x in a\n    \nlet swap_hd_fst (xs:('a*'a) list) : ('a*'a) list =\n  match xs with \n    []-> []\n  |x::ys -> let (a,b) = x in (b,a)::ys\n    \nlet hd_hd (xs:('a list) list) : 'a =\n  match xs with\n    []->raise Not_found\n  |x::ys -> match x with\n      []->raise Not_found\n    |y::zs -> y\n    \nlet rem_hd_hd (xs:('a list) list) : (int list) list =\n  match xs with\n    []->[]\n  |y::ys -> match y with\n      []->xs\n    |y::zs -> zs::ys\n\n  \n"
+    ],
+    "list_rec_int": [
+      1606236731.495823,
+      "(* Q1 *)\nlet rec repeat (n:int) (x:'a) : 'a list  = \n  if n <=0 then []\n  else x::(repeat (n-1) x)\n\n\n(* Q2 *)\nlet rec range_i (i:int) (j:int) : (int list) =\n  if i>j then []\n  else i::(range_i (i+1) j)\n\n(* Q3 *)\nlet rec range_n (x:int) (n:int) : (int list) =\n  if n <= 0 then []\n  else x::(range_n (x+1) (n-1))\n\n\n\n\n\n\n"
+    ],
+    "list_rec_list": [
+      1606237534.279963,
+      "let rec intercale1 (z:'a) (xs:'a list) : 'a list =\n  match xs with\n    []->[]\n  |x::[]-> xs\n  |x::ys-> x::z::(intercale1 z ys)\n    \nlet rec intercale2 (z:'a) (xs:'a list) : 'a list =\n  match xs with\n    []->z::[]\n  |x::[]-> z::x::z::[]\n  |x::ys-> z::x::(intercale2 z ys)\n    \nlet rec begaie (xs:'a list) : ('a list) =\n  match xs with\n    []->[] \n  |x::ys-> x::x::(begaie ys)\n\nlet rec oublie1 (xs:'a list) : ('a list) =\n  match xs with\n    []->[]\n  |x::[]->xs\n  |x::y::ys -> x::(oublie1 ys)\n\nlet rec oublie2 (xs:'a list) : ('a list) =\n  match xs with\n    []->[]\n  |x::[]->[]\n  |x::y::ys -> y::(oublie2 ys)\n\n\n\n  \n"
+    ],
+    "list_scheme_app": [
+      1606238823.439923,
+      "\nlet rec inverse_f (xs:float list) : float list = \n  match xs with \n    []->[]\n  | x::ys-> (1.0/.x)::(inverse_f ys)\n\nlet rec inverse_i (ns:int list) : float list =\n  match ns with \n    []->[]\n  | x::xs-> (1.0/.(float_of_int x))::(inverse_i xs)\n                      \nlet rec ecrete (xs:int list) : int list =\n  match xs with\n    []-> []\n  |x::ys -> if x>10 then 10::(ecrete ys)\n      else if x< -10 then (-10)::(ecrete ys)\n      else x::(ecrete ys)\n\nlet rec dpoints (xs:int list) (a:int) (b:int) : (int*int) list =\n  match xs with\n    []->[]\n  |x::ys -> (x, a*x + b)::(dpoints ys a b)\n\nlet rec app_list (f:'a -> 'b) (xs:'a list) : 'b list =\n  match xs with\n    []->[]\n  |x::ys -> (f x)::(app_list f ys)\n"
+    ],
+    "list_scheme_fil": [
+      1606239958.319181,
+      "\nlet rec list_impair (ns:int list) : int list =\n  match ns with\n    []->[]\n  | x::xs -> if x mod 2 = 1 then x::(list_impair xs)\n      else list_impair xs\n\nlet rec list_non_nulle (xs:string list) : string list =\n  match xs with\n    []->[]\n  | c::cs -> if String.length c =0 then list_non_nulle cs\n      else c::(list_non_nulle cs)\n\nlet rec list_interval (ns:int list) : int list = \n  match ns with\n    []->[]\n  | x::xs -> if x>=(-10) && x<=10 then x::(list_interval xs)\n      else list_interval xs\n\nlet rec list_non_vide (xss:('a list) list) : ('a list) list =\n  match xss with\n    []->[]\n  | y::ys -> if y=[] then list_non_vide ys\n      else y::(list_non_vide ys)\n\nlet rec list_non_0 (nss:(int list) list) : ('int list) list =\n  match nss with\n    []->[]\n  | x::xs -> if (List.mem 0 x) then list_non_0 xs\n      else x::(list_non_0 xs)\n\nlet rec list_sum_tuple (cs:(int * int) list) (s:int) : (int * int) list =\n  match cs with\n    [] -> []\n  | x::xs -> let (a,b)=x in \n      if a+b >= s then x::(list_sum_tuple xs s)\n      else list_sum_tuple xs s\n"
+    ],
+    "list_scheme_it": [
+      1607693236.537659,
+      "\n\n(* Q1 *)\nlet rec map_filter (f:'a -> 'b) (p:'b -> bool) (xs:'a list) : 'b list =\n  match xs with \n    []->[]\n  |x::xs2->let k=(f x) in\n      if (p k) then k::(map_filter f p xs2)\n      else (map_filter f p xs2)\n\n(* Q2 *)\nlet rec filter_map (p:'a -> bool) (f:'a ->  'b) (xs:'a list) : 'b list =\n  match xs with\n    []->[]\n  |x::xs2 -> if (p x) then (f x)::(filter_map p f xs2)\n      else (filter_map p f xs2)\n\n(* Q3 *)\nlet rec map_foldr (f1: 'b -> 'c -> 'c) (f2:'a -> 'b) (xs:'a list) (z:'c) :'c =\n  match xs with\n    []->z\n  |x::xs2->(f1 (f2 x) (map_foldr f1 f2 xs2 z)) \n\n(* Q4 *)\nlet rec map_foldl (f1: 'c -> 'b -> 'c) (z:'c) (f2:'a -> 'b) (xs:'a list) : 'c =\n  match xs with\n    []->z\n  |x::xs2->(map_foldl f1 (f1 z (f2 x)) f2 xs2)  \n  \n(* Q5 *)\nlet rec filter_foldr (f:'a -> 'b -> 'b) (p:'a -> bool) (xs:'a list) (z:'b) : 'b =\n  match xs with\n    []->z\n  |x::xs2 -> if (p x) then (f x (filter_foldr f p xs2 z))\n      else (filter_foldr f p xs2 z)\n\n(* Q6 *)\nlet rec filter_foldl (f:'b -> 'a -> 'b) (z:'b) (p:'a -> bool) (xs:'a list) : 'b =\n  match xs with\n    []->z\n  |x::xs2-> if (p x) then (filter_foldl f (f z x) p xs2)\n      else filter_foldl f z p xs2\n  \n"
+    ],
+    "list_scheme_red": [
+      1606240589.29828,
+      "\nlet rec prod (xs:float list) : float =\n  match xs with\n    []->1.0\n  |x::ys -> x *. (prod ys)\n\nlet rec sum_round (xs:float list) : int =\n  match xs with\n    [] -> 0\n  |x::ys -> (int_of_float x) + (sum_round ys)\n\nlet rec parenthese (xs:string list) : string =\n  match xs with \n    [] -> \"\"\n  |x::ys -> \"(\"^x^\")\"^(parenthese ys)\n\nlet rec flatten (xss:('a list) list) : 'a list =\n  match xss with\n    []->[]\n  | x::ys -> x @ (flatten ys)\n\nlet rec sum_tuple (cs:(int*int) list) : int =\n  match cs with\n    []->0\n  |x::xs -> let (a,b) = x in a + b + (sum_tuple xs)\n\nlet rec reduce (f:'a -> 'b -> 'b) (xs:'a list) (b:'b) : 'b =\n  match xs with\n    [] ->b\n  |x::ys -> (f x (reduce f ys b))\n  \n\n"
+    ],
+    "merge_sort": [
+      1606245807.030153,
+      "(* Q1 *)\nlet rec merge (xs:'a list) (ys:'a list) : 'a list =\n  match xs with \n    [] -> ys\n  |x::xs2 -> match ys with \n      [] -> xs\n    |y::ys2 -> if x < y then x::(merge xs2 ys)\n        else y::(merge xs ys2)\n                \n\n(* Q2 *)\nlet rec split (xs:'a list) : ('a list * 'a list) = \n  match xs with \n    []->([],[]) \n  | x::[] -> ([x], [])\n  |x::y::ys -> let (a,b) = (split ys) in (x::a, y::b)\n\n(* Q3 *)\nlet rec merge_sort (xs:'a list) : 'a list =\n  match xs with \n    [] -> []\n  | x::[] -> xs\n  | _ -> let (xa, xb)= (split xs) in\n      merge (merge_sort xa) (merge_sort xb)\n\n(* Q4 *)\nlet rec merge_gen (cmp:'a -> 'a -> bool) (xs:'a list) (ys:'a list) : 'a list =\n  match xs with \n    [] -> ys\n  |x::xs2 -> match ys with \n      [] -> xs\n    |y::ys2 -> if (cmp x y) then x::(merge_gen cmp xs2 ys)\n        else y::(merge_gen cmp xs ys2)\n                \n  \n(* Q5 *)\nlet rec merge_sort_gen (cmp:'a -> 'a -> bool) (xs:'a list) : 'a list =\n  match xs with \n    [] -> []\n  | x::[] -> xs\n  | _ -> let (xa, xb)= (split xs) in\n      merge_gen cmp (merge_sort_gen cmp xa) (merge_sort_gen cmp xb)\n\n(* Q6 *)\nlet sort (xs:(int*int) list) : (int*int) list =\n  let cmp (x: (int*int)) (y:(int*int)): bool = \n    let (x1, x2) = x in \n    let (y1, y2) = y in\n    if x1 + x2 < y1 + y2 then true\n    else false \n  in\n  merge_sort_gen cmp xs\n    \n"
+    ],
+    "tp1_ex1_expr": [
+      1604169871.7942,
+      "(3 * 5) + 2;; (* type: int, valeur: 17*)\n\n((fun x -> 2 * x) 7);; (* type: int, valeur: 14*)\n\n((fun x -> 2 * x) (3 * 5));; (*type: int, valeur: 30*)\n\n(((fun x -> (fun y -> x * y)) 3) 7);; (*type: int, valeur: 21*)\n\n((fun x -> fun y -> x * y) 3 7);; (*type: int, valeur: 21*)\n\n(fun f -> fun x -> (f x) + x) (fun x -> x - 1) 3;; (*type: int, valeur: 5*)\n\nlet (x, y) = (1, 2) in x + y;; (*type: int, valeur: 3*)\n\nlet a = (1, 2) in\nlet (x, y) = a in x + y;; (*type: int, valeur: 3*)\n\nlet f x = x + 1 in (f, 3);; (*type: (int->int)*int, valeur: (fonction, 3)*)\n\nlet b = true in\nif b then (fun x -> x) else (fun x->0);; (*type: int->int, valeur: \n                                         fonction identité ou nulle, \n                                         on ne peut pas affecter 0 \n                                         directement car son type est int \n                                         et non pas int->int*) \n\nlet b = true in ((if b then (fun x -> x + 1) else (fun x -> x - 1)) 5);; (*type: int, valeur: 6*)\n\n((fun b ->((fun x -> fun y -> 2 * x + 3 * y) (if b then 1 else 2) 5)) true);; (*type: int, valeur: 17*)\n\nlet f = fun x -> not x in\nlet g = fun f -> fun x -> fun y -> (f (not x)) && (f y) in\n(g f true false);; (*type: bool, valeur: true*)\n"
+    ],
+    "tp1_ex2_nuplets": [
+      1604170438.533576,
+      "\n(* Q1 *)\nlet fst p =\n  let (a,b) = p in a\n\nlet snd p =\n  let (a,b) = p in b\n(* Q.2 *)\nlet paire a b=\n  (a,b) \n  \n(* Q.3 *)\nlet paire_true a=\n  (true, a)\n  \n(* Q.4 *)\nlet curry f =\n  let g x y = f (x, y) in g \n  \n(* Q.5 *)\nlet uncurry g =\n  let f (x,y) = g x y in f"
+    ],
+    "tp1_ex3_manip_fonctions": [
+      1604170568.799888,
+      "(* Q1 *)\nlet application (f : ('a -> 'b)) (x : 'a) =\n  (f x)\n\n\n\n(* Q2 *)\nlet composition (f : ('b -> 'c)) (g : ('a -> 'b)) (x : 'a) : 'c =\n  (f (g x))\n\n\n\n(* Q3 *)\nlet f_ou_ident (f : ('a -> 'a)) (b : bool) : 'a -> 'a =\n  if b then (fun x->x) else f\n"
+    ],
+    "tp1_ex4_addition_binaire": [
+      1604168743.030049,
+      "(* Q.2 *)\n\nlet xor (a : bit) (b : bit) : bit =\n  if a = b then false \n  else true\n\n(* Q.3 *)\n\nlet half_adder (a : bit) (b : bit) : (bit * bit) =\n  ((xor a b), a && b)\n\n(* Q.4 *)\n\nlet adder (a : bit) (b : bit) (c : bit) : (bit * bit) =\n  let (s1, r1) = (half_adder a b ) in \n  let (s2, r2) = (half_adder c s1) in \n  (s2, r1||r2) \n  \n  \n(* Q.5 *)\nlet _ = assert ((adder false false false) = (false, false)) \nlet _ = assert ((adder false false true) = (true, false)) \nlet _ = assert ((adder false true false) = (true, false)) \nlet _ = assert ((adder false true true) = (false, true)) \nlet _ = assert ((adder true false false) = (true, false)) \nlet _ = assert ((adder true false true) = (false, true)) \nlet _ = assert ((adder true true false) = (false, true)) \nlet _ = assert ((adder true true true) = (true, true)) \n  \n(* Q.6 *)\n\nlet duet_adder (a : duet) (b : duet) (c : bit) : (duet * bit) =\n  let (e, f) = a in\n  let (g, h) = b in\n  let (s1, r2) = (adder f h c) in\n  let (s2, r3) = (adder e g r2) in\n  ((s2, s1) , r3)\n\n(* Q.7 *)\n\nlet quartet_adder (a : quartet) (b : quartet) (c : bit) : (quartet * bit) =\n  let (a1, a2, a3, a4) = a in\n  let (b1, b2, b3, b4) = b in\n  let ((s2, s1), c2) = duet_adder (a3, a4) (b3, b4) c in\n  let ((s4, s3), c3) = duet_adder (a1, a2) (b1, b2) c2 in\n  ((s4, s3, s2, s1), c3)\n\n(* Q.8 *)\n\nlet to_quartet (i : int) : quartet =\n  let (i2, r1) = (i/2, (i mod 2) = 1) in\n  let (i3, r2) = (i2/2, (i2 mod 2) = 1) in\n  let (i4, r3) = (i3/2, (i3 mod 2) = 1) in\n  let r4 = ( (i4 mod 2) = 1) in\n  (r4, r3, r2, r1) \n  \nlet _ = \n  let (a, r)= quartet_adder (to_quartet 4) (to_quartet 5) false in\n  assert (a= (to_quartet 9))\n  \n"
+    ],
+    "tp2_ex1_factorielle": [
+      1604170947.793434,
+      "\nlet rec fact (n:int) : int = \n  if n=0 then 1 \n  else (fact (n-1)) * n\n"
+    ],
+    "tp2_ex2_sommes": [
+      1604176455.964723,
+      "(* Q1 *)\nlet rec sum_n (n:int) : int =\n  if n=0 then 0 \n  else n + (sum_n (n-1))\n\n(* Q2 *)\nlet rec sum_n2 (n:int) : int =\n  if n<0 then raise (Invalid_argument \"sum_n\")\n  else\n  if n=0 then 0 \n  else n + (sum_n2 (n-1))\n\n(* Q3 *)\nlet rec sum_p (n:int) : int =\n  if n = 0 then 0\n  else n*2+ (sum_p (n-1))\n      \n(* Q4 *)\nlet rec sum_f (f : int -> int) (n:int) : int =\n  if n= 0 then (f 0) \n  else (f n)+ (sum_f f (n-1))\n\nlet sum_p2 (n:int) : int = \n  let f n= 2*n  in\n  (sum_f f n)\n\nlet _= assert ((sum_p 10)=(sum_p2 10))"
+    ],
+    "tp2_ex3_suite": [
+      1604177217.45144,
+      "(* Q1 *)\nlet rec u (n:int) : int =\n  if n=0 then 42 \n  else 3 * (u (n-1)) + 4 \n  (*on suppose que n est positif*)\n\n(* Q2 *)\nlet rec sum_u (n:int) : int =\n  if n=0 then 42\n  else (u n) + (sum_u (n-1))\n\n(* Q3 *)\nlet sum_u2 (n:int) : int =\n  let rec loop (n:int) (t:int): int =\n    if n=0 then t\n    else t + (loop (n-1) (3*t+4))\n  in loop n 42\n"
+    ],
+    "tp2_ex4_intervalle": [
+      1604178082.169668,
+      "(* Q1 *)\nlet rec sum_inter (a:int) (b:int) : int =\n  if a>b then 0\n  else a + (sum_inter (a+1) b)\n\n(* Q2 *)\nlet rec sum1_inter (k:int) (a:int) (b:int) : int =\n  if a>b then 0\n  else k + a + (sum1_inter k (a+1) b)\n\n(* Q3 *)\nlet sum2_inter (a:int) (b:int) : int =\n  let rec loop k =\n    if k > b then 0\n    else (sum1_inter k a b) + (loop (k+1))\n  in\n  (loop a)"
+    ],
+    "tp2_ex5_premiers": [
+      1604179440.751904,
+      "(* Q1 *)\nlet rec less_divider (i:int) (n:int) : int =\n  (*hypothèse: i<=n, i > 0, n > 0*)\n  if n=i then 0\n  else if n mod i = 0 then i\n  else (less_divider (i+1) n)\n\n(* Q2 *)\nlet prime (n:int) : bool = \n  if n=1 then false\n  else ((less_divider 2 n)=0)\n\n(* Q3 *)\nlet rec next_prime (n:int) : int=\n  if (prime n) then n\n  else (next_prime (n+1))\n  \n\n(* Q4  *)\nlet nth_prime (n:int) : int = \n  let rec loop i k =\n    if i=n then (next_prime k)\n    else (loop (i+1) (next_prime k+1))\n  in\n  (loop 0 2)\n"
+    ],
+    "tp2_ex6_square_root": [
+      1604180773.996001,
+      "(* Q1 *)\nlet f (a:float) (x:float) : float =\n  (1./.2.) *. (x +. (a/.x))\n\n(* Q2 *)\nlet rec sqrt_n (n:int) (a:float) (x0:float) =\n  if n=0 then x0\n  else (f a (sqrt_n (n-1) a x0))\n\n(* Q3 *)\nlet eq_eps (e:float) (x:float) (y:float) : bool =\n  let abs (x:float): float= \n    if x>=0. then x\n    else -.x \n  in \n  ((abs (x-.y))<e)\n\n(* Q4 *)\nlet sqrt_x (e:float) (a:float) (x0:float) : float =\n  let rec loop x=\n    let y=(f a x) in\n    if (eq_eps e x y) then y\n    else (loop (f a x))\n  in \n  (loop x0)\n"
+    ],
+    "tp4_ex1_liste": [
+      1607681377.726885,
+      "(* Exercice n°1 *)\n\n(* Q1 *)\nlet rec drop (n:int) (xs:'a list) : ('a list) =\n  if n<=0 then xs \n  else match xs with\n      []->[]\n    |x::ys -> (drop (n-1) ys)\n  \n\n(* Q2 *)\nlet rec take (n:int) (xs: 'a list) : ('a list) =\n  if n<=0 then []\n  else match xs with\n      [] -> []\n    |x::ys -> x::(take (n-1) ys)\n\n(* Q3 *)\nlet sub (xs: 'a list) (start: int) (len: int) : ('a list)=\n  (take len (drop start xs))\n"
+    ],
+    "tp4_ex2_sublist": [
+      1607683025.36721,
+      "(* Exercice n°2 *)\n\n(* Q1 *)\nlet rec sublac (xs :'a list) (ys: 'a list) : bool=\n  match (xs,ys) with\n    ([],_)->true\n  |(x::xs2, [])->false \n  |(x::xs2, y::ys2) -> if x=y then (sublac xs2 ys2) \n      else (sublac xs ys2)\n\n(* Q2 *)\nlet rec sublying (xs: int list) (ys: int list): bool = \n  match (xs, ys) with\n    ([], [])->true\n  |(_,[])->false\n  |([],_)->false\n  |(x::xs2, y::ys2)->if x=y || x=0 then (sublying xs2 ys2)\n      else false\n\n(* Q3 *)\nlet rec stretch (xs: 'a list) (ys: 'a list) : 'a list = \n  match (xs, ys) with\n    ([], [])->[] \n  |([], y::ys2)->0::(stretch xs ys2)\n  |(_,[])->raise(Invalid_argument \"stretch\")\n  |(x::xs2, y::ys2)->if x=y then x::(stretch xs2 ys2)\n      else 0::(stretch xs ys2)\n"
+    ],
+    "tp4_ex3_assoc": [
+      1607685687.6643,
+      "(* Exercice n°3 *)\n\n(* Q1 *)\nlet nb_ingredients (rdic: dico) (r: string):int = \n  (List.length (List.assoc r rdic))\n\n(* Q2 *)\nlet rec recette_avec (rdic:dico) (i:string): string list =\n  match rdic with\n    []->[]\n  |(nom,_)::rdic2-> if (List.mem i (List.assoc nom rdic)) then nom::(recette_avec rdic2 i)\n      else (recette_avec rdic2 i)\n  \n\n(* Q3 *)\nlet rec recette_sans (rdic:dico) (i:string): string list =\n  match rdic with\n    []->[]\n  |(nom,_)::rdic2-> if (List.mem i (List.assoc nom rdic)) then (recette_sans rdic2 i)\n      else nom::(recette_sans rdic2 i)\n                \n(* Q4 *)\nlet rec union (xs:'a list) (ys:'a list) : 'a list=\n  match xs with\n    []->ys\n  |x::xs2 -> if (List.mem x ys)||(List.mem x xs2) then (union xs2 ys)\n      else x::(union xs2 ys)\n\n(* Q5 *)\nlet rec tous_ingredients (rdic:dico) : string list=\n  match rdic with\n    []->[]\n  |(nom,_)::rdic2->(union (List.assoc nom rdic) (tous_ingredients rdic2))\n\n(* Q6 *)\nlet dico_ingredients (rdic : dico) : dico=\n  let ing = (tous_ingredients rdic) in\n  let rec loop (ling: string list) (rdic:dico):dico=\n    match ling with\n      []->[]\n    |i::ling2->(i,(recette_avec rdic i))::(loop ling2 rdic)\n  in\n  (loop ing rdic)\n\n(* Q7 *)\nlet ingredient_principal (idic:dico):string=\n  let rec loop (xs:dico) (r:string) (n:int):string=\n    match xs with\n      []->r\n    |(ing,xi)::xs2->let k=(List.length xi) in\n        if k>n then (loop xs2 ing k) \n        else (loop xs2 r n)\n  in\n  match idic with\n    []->raise(Invalid_argument \"idic\")\n  |(ing, xi)::xs->(loop xs ing (List.length xi))\n\n"
+    ]
+  },
+  "exercises": {
+    "btree_alt": {
+      "grade": 100,
+      "solution": "\n(* Q1 *)\nlet rec taille (ubt:'a ubtree) : int =\n  match ubt with\n    Empty2->0 \n  |Leaf x->1 \n  |Node2(g,x,d)-> 1+(taille g)+(taille d)\n  \n(* Q2 *)\nlet rec hauteur (ubt:'a ubtree) : int =\n  match ubt with\n    Empty2->0 \n  |Leaf x->1\n  |Node2(g,x,d)-> 1+(max (hauteur g)(hauteur d))\n\n(* Q3 *)\nlet rec leaves (ubt:'a ubtree) : 'a list =\n  match ubt with\n    Empty2->[]\n  |Leaf x->[x] \n  |Node2 (g,x,d) -> (leaves g)@(leaves d)\n  \n(* Q4 *)\nlet rec bt_to_ubt (bt:'a btree) : 'a ubtree =\n  match bt with\n    Empty->Empty2\n  |Node(x,Empty,Empty)->Leaf x\n  |Node(x,g,d)->Node2((bt_to_ubt g),x,(bt_to_ubt d))\n\n\n  \n\n\n\n  \n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "taille",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "hauteur",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "leaves",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "bt_to_ubt",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1607767484.282035
+    },
+    "btree_init": {
+      "grade": 100,
+      "solution": "\n\n(* Q1 *)\nlet rec hauteur (bt:'a btree) : int =\n  match bt with\n    Empty->0\n  |Node(x,g,d)->1+(max (hauteur g) (hauteur d))\n\n(* Q2 *)\nlet rec list_by_depth (bt:'a btree) (n:int) : 'a list =\n  match bt with\n    Empty->[]\n  |Node(x,g,d)->if n=0 then [x]\n      else (list_by_depth g (n-1))@(list_by_depth d (n-1))\n\n(* Q3 *)\nlet rec to_list (bt:'a btree) : 'a list =\n  match bt with\n    Empty -> []\n  |Node(x,g,d)-> x::((to_list g)@(to_list d))\n\n  \n\n\n\n  \n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "hauteur",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "list_by_depth",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "to_list",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1607693759.910698
+    },
+    "btree_search": {
+      "grade": 100,
+      "solution": "(* Q1 *)\nlet rec lt_btree (bt:'a btree) (x:'a) : bool =\n  match bt with\n    Empty->true\n  |Node(y,g,d)->if y<x then (lt_btree g x)&&(lt_btree d x)\n      else false\n\n(* Q2 *)\nlet rec ge_btree (bt:'a btree) (x:'a) : bool =\n  match bt with\n    Empty -> true\n  |Node(y,g,d) -> if y>=x then (ge_btree g x)&&(ge_btree d x)\n      else false\n\n(* Q3 *)\nlet rec is_abr (bt:'a btree) : bool =\n  match bt with\n    Empty->true\n  |Node(x,g,d)->if (lt_btree g x)&&(ge_btree d x) then (is_abr g)&&(is_abr d)\n      else false\n\n(* Q4 *)\nlet rec mem (bt:'a btree) (x:'a) : bool =\n  match bt with\n    Empty->false\n  |Node(y,g,d)->if x=y then true \n      else if x<y then (mem g x)\n      else (mem d x)\n  \n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "lt_btree",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "ge_btree",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "is_abr",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "mem",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1607697242.300218
+    },
+    "list_iter": {
+      "grade": 100,
+      "solution": "\n(* Q1 *)\nlet inverse_i (xs:int list) : float list = \n  let f (x:int):float =\n    if x=0 then 0.\n    else\n      1./.(float_of_int x)\n  in\n  (List.map f xs)\n\n(* Q2 *)\nlet list_sum_tuple (cs:(int*int) list) (s:int) : (int*int) list =\n  let f (x:(int*int)): bool=\n    let (a,b) = x in\n    (a+b>=s)\n  in\n  (List.filter f cs )\n\n(* Q3 *)\nlet parenthese (xs:string list) : string =\n  let f (x:string) (a:string):string=\n    \"(\"^x^\")\"^a\n  in\n  (List.fold_right f xs \"\")\n\n(* Q4 *)\nlet list_non_0 (nss:(int list) list) : (int list) list =\n  let f (xs:int list):bool=\n    not (List.mem 0 xs)\n  in\n  (List.filter f nss)\n\n(* Q5 *)\nlet dpoints (xs:int list) (a:int) (b:int) : (int*int) list =\n  let f (x:int):(int*int)=\n    (x,a*x+b) \n  in\n  (List.map f xs)\n\n(* Q6 *)\nlet prod_sum_tuple (cs:(int*int) list) : int =\n  let f (a:int) (x:(int*int)) =\n    let (x1,x2)=x in (x1+x2)*a\n  in\n  (List.fold_left f 1 cs)\n    \n\n\n  \n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "inverse_i",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "list_sum_tuple",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "parenthese",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "list_non_0",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "5"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "dpoints",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "6"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "prod_sum_tuple",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1607687342.0459
+    },
+    "list_matching1": {
+      "grade": 100,
+      "solution": "let len_eq_3 (xs:'a list) : bool =\n  match xs with\n    x::y::z::[ ] -> true \n  | _ ->false\n    \n\nlet len_ge_3 (xs:'a list) : bool =\n  match xs with\n    [ ] -> false\n  |x::[]->false\n  |x::y::[ ]->false\n  |x::y::ys->true \n  \nlet len_lt_3 (xs:'a list) : bool =\n  match xs with \n    [ ] -> true\n  |x::[]->true\n  |x::y::[ ]->true\n  |_->false\n    \nlet len_comp_3 (xs:'a list) : int =\n  let a = (len_ge_3 xs) in\n  match a with\n    false-> -1\n  |true->let b = (len_eq_3 xs) in\n      match b with\n        true->0\n      |false -> 1\n    \n\n  \n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "len_eq_3",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "len_ge_3",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "len_lt_3",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "len_comp_3",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1606234450.622026
+    },
+    "list_matching2": {
+      "grade": 100,
+      "solution": "let snd (xs:'a list) : 'a =\n  match xs with\n    []-> raise Not_found\n  |x::[]->raise Not_found\n  |x::y::ys -> y\n    \nlet swap_hd_snd (xs:'a list) : 'a list =\n  match xs with \n    []-> xs\n  |x::[]->xs\n  |x::y::ys -> y::x::ys \n    \nlet hd_0 (xs:int list) : bool =\n  match xs with\n    []->false\n  |x::ys-> x = 0\n    \nlet eq_hd (x:'a) (xs:'a list) : bool =\n  match xs with \n    []->false\n  |y::ys -> y = x\n     \n    \n\n  \n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "snd",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "swap_hd_snd",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "hd_0",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "eq_hd",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1606235470.530162
+    },
+    "list_matching3": {
+      "grade": 100,
+      "solution": "    \nlet hd_fst (xs:('a*'b) list) : 'a =\n  match xs with\n    []-> raise Not_found\n  |x::ys -> let (a,b) = x in a\n    \nlet swap_hd_fst (xs:('a*'a) list) : ('a*'a) list =\n  match xs with \n    []-> []\n  |x::ys -> let (a,b) = x in (b,a)::ys\n    \nlet hd_hd (xs:('a list) list) : 'a =\n  match xs with\n    []->raise Not_found\n  |x::ys -> match x with\n      []->raise Not_found\n    |y::zs -> y\n    \nlet rem_hd_hd (xs:('a list) list) : (int list) list =\n  match xs with\n    []->[]\n  |y::ys -> match y with\n      []->xs\n    |y::zs -> zs::ys\n\n  \n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "hd_fst",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "swap_hd_fst",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "hd_hd",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "rem_hd_hd",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1606236219.013024
+    },
+    "list_rec_int": {
+      "grade": 100,
+      "solution": "(* Q1 *)\nlet rec repeat (n:int) (x:'a) : 'a list  = \n  if n <=0 then []\n  else x::(repeat (n-1) x)\n\n\n(* Q2 *)\nlet rec range_i (i:int) (j:int) : (int list) =\n  if i>j then []\n  else i::(range_i (i+1) j)\n\n(* Q3 *)\nlet rec range_n (x:int) (n:int) : (int list) =\n  if n <= 0 then []\n  else x::(range_n (x+1) (n-1))\n\n\n\n\n\n\n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "repeat",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "range_i",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "range_n",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1606236711.071171
+    },
+    "list_rec_list": {
+      "grade": 100,
+      "solution": "let rec intercale1 (z:'a) (xs:'a list) : 'a list =\n  match xs with\n    []->[]\n  |x::[]-> xs\n  |x::ys-> x::z::(intercale1 z ys)\n    \nlet rec intercale2 (z:'a) (xs:'a list) : 'a list =\n  match xs with\n    []->z::[]\n  |x::[]-> z::x::z::[]\n  |x::ys-> z::x::(intercale2 z ys)\n    \nlet rec begaie (xs:'a list) : ('a list) =\n  match xs with\n    []->[] \n  |x::ys-> x::x::(begaie ys)\n\nlet rec oublie1 (xs:'a list) : ('a list) =\n  match xs with\n    []->[]\n  |x::[]->xs\n  |x::y::ys -> x::(oublie1 ys)\n\nlet rec oublie2 (xs:'a list) : ('a list) =\n  match xs with\n    []->[]\n  |x::[]->[]\n  |x::y::ys -> y::(oublie2 ys)\n\n\n\n  \n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "intercale1",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "intercale2",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "begaie",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "oublie1",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "5"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "oublie2",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1606237528.2744
+    },
+    "list_scheme_app": {
+      "grade": 100,
+      "solution": "\nlet rec inverse_f (xs:float list) : float list = \n  match xs with \n    []->[]\n  | x::ys-> (1.0/.x)::(inverse_f ys)\n\nlet rec inverse_i (ns:int list) : float list =\n  match ns with \n    []->[]\n  | x::xs-> (1.0/.(float_of_int x))::(inverse_i xs)\n                      \nlet rec ecrete (xs:int list) : int list =\n  match xs with\n    []-> []\n  |x::ys -> if x>10 then 10::(ecrete ys)\n      else if x< -10 then (-10)::(ecrete ys)\n      else x::(ecrete ys)\n\nlet rec dpoints (xs:int list) (a:int) (b:int) : (int*int) list =\n  match xs with\n    []->[]\n  |x::ys -> (x, a*x + b)::(dpoints ys a b)\n\nlet rec app_list (f:'a -> 'b) (xs:'a list) : 'b list =\n  match xs with\n    []->[]\n  |x::ys -> (f x)::(app_list f ys)\n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "inverse_f",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "inverse_i",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "ecrete",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "dpoints",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "5"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "app_list",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1606238823.439923
+    },
+    "list_scheme_fil": {
+      "grade": 100,
+      "solution": "\nlet rec list_impair (ns:int list) : int list =\n  match ns with\n    []->[]\n  | x::xs -> if x mod 2 = 1 then x::(list_impair xs)\n      else list_impair xs\n\nlet rec list_non_nulle (xs:string list) : string list =\n  match xs with\n    []->[]\n  | c::cs -> if String.length c =0 then list_non_nulle cs\n      else c::(list_non_nulle cs)\n\nlet rec list_interval (ns:int list) : int list = \n  match ns with\n    []->[]\n  | x::xs -> if x>=(-10) && x<=10 then x::(list_interval xs)\n      else list_interval xs\n\nlet rec list_non_vide (xss:('a list) list) : ('a list) list =\n  match xss with\n    []->[]\n  | y::ys -> if y=[] then list_non_vide ys\n      else y::(list_non_vide ys)\n\nlet rec list_non_0 (nss:(int list) list) : ('int list) list =\n  match nss with\n    []->[]\n  | x::xs -> if (List.mem 0 x) then list_non_0 xs\n      else x::(list_non_0 xs)\n\nlet rec list_sum_tuple (cs:(int * int) list) (s:int) : (int * int) list =\n  match cs with\n    [] -> []\n  | x::xs -> let (a,b)=x in \n      if a+b >= s then x::(list_sum_tuple xs s)\n      else list_sum_tuple xs s\n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "list_impair",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "list_non_nulle",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "list_interval",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "list_non_vide",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "5"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "list_non_0",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "6"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "list_sum_tuple",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1606239958.319181
+    },
+    "list_scheme_it": {
+      "grade": 100,
+      "solution": "\n\n(* Q1 *)\nlet rec map_filter (f:'a -> 'b) (p:'b -> bool) (xs:'a list) : 'b list =\n  match xs with \n    []->[]\n  |x::xs2->let k=(f x) in\n      if (p k) then k::(map_filter f p xs2)\n      else (map_filter f p xs2)\n\n(* Q2 *)\nlet rec filter_map (p:'a -> bool) (f:'a ->  'b) (xs:'a list) : 'b list =\n  match xs with\n    []->[]\n  |x::xs2 -> if (p x) then (f x)::(filter_map p f xs2)\n      else (filter_map p f xs2)\n\n(* Q3 *)\nlet rec map_foldr (f1: 'b -> 'c -> 'c) (f2:'a -> 'b) (xs:'a list) (z:'c) :'c =\n  match xs with\n    []->z\n  |x::xs2->(f1 (f2 x) (map_foldr f1 f2 xs2 z)) \n\n(* Q4 *)\nlet rec map_foldl (f1: 'c -> 'b -> 'c) (z:'c) (f2:'a -> 'b) (xs:'a list) : 'c =\n  match xs with\n    []->z\n  |x::xs2->(map_foldl f1 (f1 z (f2 x)) f2 xs2)  \n  \n(* Q5 *)\nlet rec filter_foldr (f:'a -> 'b -> 'b) (p:'a -> bool) (xs:'a list) (z:'b) : 'b =\n  match xs with\n    []->z\n  |x::xs2 -> if (p x) then (f x (filter_foldr f p xs2 z))\n      else (filter_foldr f p xs2 z)\n\n(* Q6 *)\nlet rec filter_foldl (f:'b -> 'a -> 'b) (z:'b) (p:'a -> bool) (xs:'a list) : 'b =\n  match xs with\n    []->z\n  |x::xs2-> if (p x) then (filter_foldl f (f z x) p xs2)\n      else filter_foldl f z p xs2\n  \n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "map_filter",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "filter_map",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "map_foldr",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "map_foldl",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "5"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "filter_foldr",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "6"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "filter_foldl",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1607693236.537659
+    },
+    "list_scheme_red": {
+      "grade": 100,
+      "solution": "\nlet rec prod (xs:float list) : float =\n  match xs with\n    []->1.0\n  |x::ys -> x *. (prod ys)\n\nlet rec sum_round (xs:float list) : int =\n  match xs with\n    [] -> 0\n  |x::ys -> (int_of_float x) + (sum_round ys)\n\nlet rec parenthese (xs:string list) : string =\n  match xs with \n    [] -> \"\"\n  |x::ys -> \"(\"^x^\")\"^(parenthese ys)\n\nlet rec flatten (xss:('a list) list) : 'a list =\n  match xss with\n    []->[]\n  | x::ys -> x @ (flatten ys)\n\nlet rec sum_tuple (cs:(int*int) list) : int =\n  match cs with\n    []->0\n  |x::xs -> let (a,b) = x in a + b + (sum_tuple xs)\n\nlet rec reduce (f:'a -> 'b -> 'b) (xs:'a list) (b:'b) : 'b =\n  match xs with\n    [] ->b\n  |x::ys -> (f x (reduce f ys b))\n  \n\n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "prod",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sum_round",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "parenthese",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "flatten",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "5"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sum_tuple",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "6"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "reduce",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1606240589.29828
+    },
+    "merge_sort": {
+      "grade": 100,
+      "solution": "(* Q1 *)\nlet rec merge (xs:'a list) (ys:'a list) : 'a list =\n  match xs with \n    [] -> ys\n  |x::xs2 -> match ys with \n      [] -> xs\n    |y::ys2 -> if x < y then x::(merge xs2 ys)\n        else y::(merge xs ys2)\n                \n\n(* Q2 *)\nlet rec split (xs:'a list) : ('a list * 'a list) = \n  match xs with \n    []->([],[]) \n  | x::[] -> ([x], [])\n  |x::y::ys -> let (a,b) = (split ys) in (x::a, y::b)\n\n(* Q3 *)\nlet rec merge_sort (xs:'a list) : 'a list =\n  match xs with \n    [] -> []\n  | x::[] -> xs\n  | _ -> let (xa, xb)= (split xs) in\n      merge (merge_sort xa) (merge_sort xb)\n\n(* Q4 *)\nlet rec merge_gen (cmp:'a -> 'a -> bool) (xs:'a list) (ys:'a list) : 'a list =\n  match xs with \n    [] -> ys\n  |x::xs2 -> match ys with \n      [] -> xs\n    |y::ys2 -> if (cmp x y) then x::(merge_gen cmp xs2 ys)\n        else y::(merge_gen cmp xs ys2)\n                \n  \n(* Q5 *)\nlet rec merge_sort_gen (cmp:'a -> 'a -> bool) (xs:'a list) : 'a list =\n  match xs with \n    [] -> []\n  | x::[] -> xs\n  | _ -> let (xa, xb)= (split xs) in\n      merge_gen cmp (merge_sort_gen cmp xa) (merge_sort_gen cmp xb)\n\n(* Q6 *)\nlet sort (xs:(int*int) list) : (int*int) list =\n  let cmp (x: (int*int)) (y:(int*int)): bool = \n    let (x1, x2) = x in \n    let (y1, y2) = y in\n    if x1 + x2 < y1 + y2 then true\n    else false \n  in\n  merge_sort_gen cmp xs\n    \n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "merge",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "split",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "merge_sort",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "merge_gen",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "5"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "merge_sort_gen",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "6"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sort",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1606245798.67957
+    },
+    "tp1_ex1_expr": {
+      "grade": 100,
+      "solution": "(3 * 5) + 2;; (* type: int, valeur: 17*)\n\n((fun x -> 2 * x) 7);; (* type: int, valeur: 14*)\n\n((fun x -> 2 * x) (3 * 5));; (*type: int, valeur: 30*)\n\n(((fun x -> (fun y -> x * y)) 3) 7);; (*type: int, valeur: 21*)\n\n((fun x -> fun y -> x * y) 3 7);; (*type: int, valeur: 21*)\n\n(fun f -> fun x -> (f x) + x) (fun x -> x - 1) 3;; (*type: int, valeur: 5*)\n\nlet (x, y) = (1, 2) in x + y;; (*type: int, valeur: 3*)\n\nlet a = (1, 2) in\nlet (x, y) = a in x + y;; (*type: int, valeur: 3*)\n\nlet f x = x + 1 in (f, 3);; (*type: (int->int)*int, valeur: (fonction, 3)*)\n\nlet b = true in\nif b then (fun x -> x) else (fun x->0);; (*type: int->int, valeur: \n                                         fonction identité ou nulle, \n                                         on ne peut pas affecter 0 \n                                         directement car son type est int \n                                         et non pas int->int*) \n\nlet b = true in ((if b then (fun x -> x + 1) else (fun x -> x - 1)) 5);; (*type: int, valeur: 6*)\n\n((fun b ->((fun x -> fun y -> 2 * x + 3 * y) (if b then 1 else 2) 5)) true);; (*type: int, valeur: 17*)\n\nlet f = fun x -> not x in\nlet g = fun f -> fun x -> fun y -> (f (not x)) && (f y) in\n(g f true false);; (*type: bool, valeur: true*)\n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            }
+          ]
+        }
+      ],
+      "mtime": 1604169852.540389
+    },
+    "tp1_ex2_nuplets": {
+      "grade": 100,
+      "solution": "\n(* Q1 *)\nlet fst p =\n  let (a,b) = p in a\n\nlet snd p =\n  let (a,b) = p in b\n(* Q.2 *)\nlet paire a b=\n  (a,b) \n  \n(* Q.3 *)\nlet paire_true a=\n  (true, a)\n  \n(* Q.4 *)\nlet curry f =\n  let g x y = f (x, y) in g \n  \n(* Q.5 *)\nlet uncurry g =\n  let f (x,y) = g x y in f",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "fst",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "snd",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "paire",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "paire_true",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "curry",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "5"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "uncurry",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1604170423.080793
+    },
+    "tp1_ex3_manip_fonctions": {
+      "grade": 100,
+      "solution": "(* Q1 *)\nlet application (f : ('a -> 'b)) (x : 'a) =\n  (f x)\n\n\n\n(* Q2 *)\nlet composition (f : ('b -> 'c)) (g : ('a -> 'b)) (x : 'a) : 'c =\n  (f (g x))\n\n\n\n(* Q3 *)\nlet f_ou_ident (f : ('a -> 'a)) (b : bool) : 'a -> 'a =\n  if b then (fun x->x) else f\n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "application",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "composition",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "f_ou_ident",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1604170568.799888
+    },
+    "tp1_ex4_addition_binaire": {
+      "grade": 100,
+      "solution": "(* Q.2 *)\n\nlet xor (a : bit) (b : bit) : bit =\n  if a = b then false \n  else true\n\n(* Q.3 *)\n\nlet half_adder (a : bit) (b : bit) : (bit * bit) =\n  ((xor a b), a && b)\n\n(* Q.4 *)\n\nlet adder (a : bit) (b : bit) (c : bit) : (bit * bit) =\n  let (s1, r1) = (half_adder a b ) in \n  let (s2, r2) = (half_adder c s1) in \n  (s2, r1||r2) \n  \n  \n(* Q.5 *)\nlet _ = assert ((adder false false false) = (false, false)) \nlet _ = assert ((adder false false true) = (true, false)) \nlet _ = assert ((adder false true false) = (true, false)) \nlet _ = assert ((adder false true true) = (false, true)) \nlet _ = assert ((adder true false false) = (true, false)) \nlet _ = assert ((adder true false true) = (false, true)) \nlet _ = assert ((adder true true false) = (false, true)) \nlet _ = assert ((adder true true true) = (true, true)) \n  \n(* Q.6 *)\n\nlet duet_adder (a : duet) (b : duet) (c : bit) : (duet * bit) =\n  let (e, f) = a in\n  let (g, h) = b in\n  let (s1, r2) = (adder f h c) in\n  let (s2, r3) = (adder e g r2) in\n  ((s2, s1) , r3)\n\n(* Q.7 *)\n\nlet quartet_adder (a : quartet) (b : quartet) (c : bit) : (quartet * bit) =\n  let (a1, a2, a3, a4) = a in\n  let (b1, b2, b3, b4) = b in\n  let ((s2, s1), c2) = duet_adder (a3, a4) (b3, b4) c in\n  let ((s4, s3), c3) = duet_adder (a1, a2) (b1, b2) c2 in\n  ((s4, s3, s2, s1), c3)\n\n(* Q.8 *)\n\nlet to_quartet (i : int) : quartet =\n  let (i2, r1) = (i/2, (i mod 2) = 1) in\n  let (i3, r2) = (i2/2, (i2 mod 2) = 1) in\n  let (i4, r3) = (i3/2, (i3 mod 2) = 1) in\n  let r4 = ( (i4 mod 2) = 1) in\n  (r4, r3, r2, r1) \n  \nlet _ = \n  let (a, r)= quartet_adder (to_quartet 4) (to_quartet 5) false in\n  assert (a= (to_quartet 9))\n  \n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "xor",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "half_adder",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "adder",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "quartet_adder",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1604168722.791434
+    },
+    "tp2_ex1_factorielle": {
+      "grade": 100,
+      "solution": "\nlet rec fact (n:int) : int = \n  if n=0 then 1 \n  else (fact (n-1)) * n\n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "fact",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1604170944.55133
+    },
+    "tp2_ex2_sommes": {
+      "grade": 100,
+      "solution": "(* Q1 *)\nlet rec sum_n (n:int) : int =\n  if n=0 then 0 \n  else n + (sum_n (n-1))\n\n(* Q2 *)\nlet rec sum_n2 (n:int) : int =\n  if n<0 then raise (Invalid_argument \"sum_n\")\n  else\n  if n=0 then 0 \n  else n + (sum_n2 (n-1))\n\n(* Q3 *)\nlet rec sum_p (n:int) : int =\n  if n = 0 then 0\n  else n*2+ (sum_p (n-1))\n      \n(* Q4 *)\nlet rec sum_f (f : int -> int) (n:int) : int =\n  if n= 0 then (f 0) \n  else (f n)+ (sum_f f (n-1))\n\nlet sum_p2 (n:int) : int = \n  let f n= 2*n  in\n  (sum_f f n)\n\nlet _= assert ((sum_p 10)=(sum_p2 10))",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sum_n",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sum_n2",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sum_p",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sum_p2",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1604176446.488633
+    },
+    "tp2_ex3_suite": {
+      "grade": 100,
+      "solution": "(* Q1 *)\nlet rec u (n:int) : int =\n  if n=0 then 42 \n  else 3 * (u (n-1)) + 4 \n  (*on suppose que n est positif*)\n\n(* Q2 *)\nlet rec sum_u (n:int) : int =\n  if n=0 then 42\n  else (u n) + (sum_u (n-1))\n\n(* Q3 *)\nlet sum_u2 (n:int) : int =\n  let rec loop (n:int) (t:int): int =\n    if n=0 then t\n    else t + (loop (n-1) (3*t+4))\n  in loop n 42\n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "u",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sum_u",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sum_u2",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1604177213.308742
+    },
+    "tp2_ex4_intervalle": {
+      "grade": 100,
+      "solution": "(* Q1 *)\nlet rec sum_inter (a:int) (b:int) : int =\n  if a>b then 0\n  else a + (sum_inter (a+1) b)\n\n(* Q2 *)\nlet rec sum1_inter (k:int) (a:int) (b:int) : int =\n  if a>b then 0\n  else k + a + (sum1_inter k (a+1) b)\n\n(* Q3 *)\nlet sum2_inter (a:int) (b:int) : int =\n  let rec loop k =\n    if k > b then 0\n    else (sum1_inter k a b) + (loop (k+1))\n  in\n  (loop a)",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sum_inter",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sum1_inter",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sum2_inter",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1604178075.683813
+    },
+    "tp2_ex5_premiers": {
+      "grade": 100,
+      "solution": "(* Q1 *)\nlet rec less_divider (i:int) (n:int) : int =\n  (*hypothèse: i<=n, i > 0, n > 0*)\n  if n=i then 0\n  else if n mod i = 0 then i\n  else (less_divider (i+1) n)\n\n(* Q2 *)\nlet prime (n:int) : bool = \n  if n=1 then false\n  else ((less_divider 2 n)=0)\n\n(* Q3 *)\nlet rec next_prime (n:int) : int=\n  if (prime n) then n\n  else (next_prime (n+1))\n  \n\n(* Q4  *)\nlet nth_prime (n:int) : int = \n  let rec loop i k =\n    if i=n then (next_prime k)\n    else (loop (i+1) (next_prime k+1))\n  in\n  (loop 0 2)\n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "less_divider",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "prime",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "next_prime",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "nth_prime",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1604179396.75516
+    },
+    "tp2_ex6_square_root": {
+      "grade": 100,
+      "solution": "(* Q1 *)\nlet f (a:float) (x:float) : float =\n  (1./.2.) *. (x +. (a/.x))\n\n(* Q2 *)\nlet rec sqrt_n (n:int) (a:float) (x0:float) =\n  if n=0 then x0\n  else (f a (sqrt_n (n-1) a x0))\n\n(* Q3 *)\nlet eq_eps (e:float) (x:float) (y:float) : bool =\n  let abs (x:float): float= \n    if x>=0. then x\n    else -.x \n  in \n  ((abs (x-.y))<e)\n\n(* Q4 *)\nlet sqrt_x (e:float) (a:float) (x0:float) : float =\n  let rec loop x=\n    let y=(f a x) in\n    if (eq_eps e x y) then y\n    else (loop (f a x))\n  in \n  (loop x0)\n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "f",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sqrt_n",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "eq_eps",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q"
+            },
+            {
+              "text": "4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sqrt_x",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1604180769.791238
+    },
+    "tp4_ex1_liste": {
+      "grade": 100,
+      "solution": "(* Exercice n°1 *)\n\n(* Q1 *)\nlet rec drop (n:int) (xs:'a list) : ('a list) =\n  if n<=0 then xs \n  else match xs with\n      []->[]\n    |x::ys -> (drop (n-1) ys)\n  \n\n(* Q2 *)\nlet rec take (n:int) (xs: 'a list) : ('a list) =\n  if n<=0 then []\n  else match xs with\n      [] -> []\n    |x::ys -> x::(take (n-1) ys)\n\n(* Q3 *)\nlet sub (xs: 'a list) (start: int) (len: int) : ('a list)=\n  (take len (drop start xs))\n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "drop",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "take",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sub",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1607681377.726885
+    },
+    "tp4_ex2_sublist": {
+      "grade": 100,
+      "solution": "(* Exercice n°2 *)\n\n(* Q1 *)\nlet rec sublac (xs :'a list) (ys: 'a list) : bool=\n  match (xs,ys) with\n    ([],_)->true\n  |(x::xs2, [])->false \n  |(x::xs2, y::ys2) -> if x=y then (sublac xs2 ys2) \n      else (sublac xs ys2)\n\n(* Q2 *)\nlet rec sublying (xs: int list) (ys: int list): bool = \n  match (xs, ys) with\n    ([], [])->true\n  |(_,[])->false\n  |([],_)->false\n  |(x::xs2, y::ys2)->if x=y || x=0 then (sublying xs2 ys2)\n      else false\n\n(* Q3 *)\nlet rec stretch (xs: 'a list) (ys: 'a list) : 'a list = \n  match (xs, ys) with\n    ([], [])->[] \n  |([], y::ys2)->0::(stretch xs ys2)\n  |(_,[])->raise(Invalid_argument \"stretch\")\n  |(x::xs2, y::ys2)->if x=y then x::(stretch xs2 ys2)\n      else 0::(stretch xs ys2)\n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sublac",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "sublying",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "stretch",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1607683025.36721
+    },
+    "tp4_ex3_assoc": {
+      "grade": 100,
+      "solution": "(* Exercice n°3 *)\n\n(* Q1 *)\nlet nb_ingredients (rdic: dico) (r: string):int = \n  (List.length (List.assoc r rdic))\n\n(* Q2 *)\nlet rec recette_avec (rdic:dico) (i:string): string list =\n  match rdic with\n    []->[]\n  |(nom,_)::rdic2-> if (List.mem i (List.assoc nom rdic)) then nom::(recette_avec rdic2 i)\n      else (recette_avec rdic2 i)\n  \n\n(* Q3 *)\nlet rec recette_sans (rdic:dico) (i:string): string list =\n  match rdic with\n    []->[]\n  |(nom,_)::rdic2-> if (List.mem i (List.assoc nom rdic)) then (recette_sans rdic2 i)\n      else nom::(recette_sans rdic2 i)\n                \n(* Q4 *)\nlet rec union (xs:'a list) (ys:'a list) : 'a list=\n  match xs with\n    []->ys\n  |x::xs2 -> if (List.mem x ys)||(List.mem x xs2) then (union xs2 ys)\n      else x::(union xs2 ys)\n\n(* Q5 *)\nlet rec tous_ingredients (rdic:dico) : string list=\n  match rdic with\n    []->[]\n  |(nom,_)::rdic2->(union (List.assoc nom rdic) (tous_ingredients rdic2))\n\n(* Q6 *)\nlet dico_ingredients (rdic : dico) : dico=\n  let ing = (tous_ingredients rdic) in\n  let rec loop (ling: string list) (rdic:dico):dico=\n    match ling with\n      []->[]\n    |i::ling2->(i,(recette_avec rdic i))::(loop ling2 rdic)\n  in\n  (loop ing rdic)\n\n(* Q7 *)\nlet ingredient_principal (idic:dico):string=\n  let rec loop (xs:dico) (r:string) (n:int):string=\n    match xs with\n      []->r\n    |(ing,xi)::xs2->let k=(List.length xi) in\n        if k>n then (loop xs2 ing k) \n        else (loop xs2 r n)\n  in\n  match idic with\n    []->raise(Invalid_argument \"idic\")\n  |(ing, xi)::xs->(loop xs ing (List.length xi))\n\n",
+      "report": [
+        {
+          "section": [
+            {
+              "text": "Q1"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "nb_ingredients",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q2"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "recette_avec",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q3"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "recette_sans",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q4"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "union",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q5"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "tous_ingredients",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q6"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "dico_ingredients",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        },
+        {
+          "section": [
+            {
+              "text": "Q7"
+            }
+          ],
+          "contents": [
+            {
+              "message": [],
+              "result": 1
+            },
+            {
+              "message": [
+                {
+                  "text": "L'expression suivante :"
+                },
+                {},
+                {
+                  "text": "ingredient_principal",
+                  "display": "output"
+                },
+                {
+                  "text": " semble correcte."
+                }
+              ],
+              "result": "informative"
+            }
+          ]
+        }
+      ],
+      "mtime": 1607685687.6643
+    }
+  },
+  "exercise-toplevel-histories": {
+    "btree_alt": {
+      "phrases": [
+        "leaves Node2(Empty2,7,Empty2)",
+        "leaves (Node2(Empty2,7,Empty2))",
+        "taille (Node2 (Node2 (Leaf 3, 2, Node2 (Leaf 5, 4, Empty2)), 1,\n  Node2 (Empty2, 6, Node2 (Empty2, 7, Leaf 8))))",
+        "taille (Node2 (Node2 (Leaf 3, 2, Node2 (Leaf 5, 4, Empty2)), 1,\n\n  Node2 (Empty2, 6, Node2 (Empty2, 7, Leaf 8))))",
+        "leaves (Node2 (Node2 (Leaf 3, 2, Node2 (Leaf 5, 4, Empty2)), 1,\n  Node2 (Empty2, 6, Node2 (Empty2, 7, Leaf 8))))"
+      ],
+      "mtime": 1607695447.585
+    }
+  }
+}

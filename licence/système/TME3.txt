@@ -1,0 +1,221 @@
+=====================================================
+
+2I015 - COMPTE-RENDU TME 3 (Entrées/sorties)
+
+Noms, prénoms et numéro des étudiants du binôme :
+1)Anatole Vercelloni
+2)
+
+=====================================================
+
+
+EXERCICE 1 : TUBES ANONYMES
+===========================
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include<unistd.h>
+#include <sys/wait.h>
+
+int main (int argc, char argv []){
+	srand(time(NULL));
+	int tube[2];
+	int pid;
+	pipe(tube);
+	if (fork() == 0 ){
+		close(tube[1]);
+		int buf;
+		read(tube[0], &buf, sizeof(int));
+		printf("je suis  fils %d et j'ai lu %d\n",getpid(),buf);
+		close (tube[0]);
+		close (tube[1]);
+		exit (EXIT_SUCCESS);
+	}else{
+		if (fork()==0){
+			
+			close(tube[0]);
+			int alea = rand()%100;
+			write(tube[1],&alea, sizeof (int));
+			printf("je suis  fils %d et j'ai ecrit %d\n",getpid(),alea);
+			close (tube[1]);
+			close (tube[0]);
+			exit (EXIT_SUCCESS);	
+		}
+	}
+	return 0;
+}
+	
+
+
+EXERCICE 2 : TUBES NOMMES
+=========================
+exo2a.c:
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include<unistd.h>
+#include <sys/wait.h>
+
+int main (int argc, char* argv []){
+	srand(time(NULL));
+	int alea = srand()%100;
+	mkfifo(argv[1],S_IRUSR|S_IWUSR);
+	int fd1 = open(argv[1], O_WRONLY);
+	write(fd1, &alea, sizeof(int));
+	printf("J'ai écrit %d\n",alea);
+	close(fd1);
+	return 0;
+}
+
+exo2b.c
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include<unistd.h>
+#include <sys/wait.h>
+
+int main (int argc, char* argv []){
+	int buf;
+	int fd2 = open(argv[1], O_RDONLY);
+	read(fd,&buf, sizeof(int));
+	printf("J'ai lu %d\n",buf);
+	close(fd2);
+	return 0;
+}
+
+EXERCICE 3 : OUVERTURES MULTIPLES ET PARTAGE D'OFFSET
+=====================================================
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include<unistd.h>
+#include <sys/wait.h>
+
+int main (int argc, char* argv []){
+	int tube[2];
+	pipe(tube);
+	int lu;
+	int fic = open("compte_rendu.txt",O_RDONLY);
+	if ( fic ==-1){
+		printf("ereur\n");
+		return 0;
+	}
+	tube[0]=fic;
+	printf("le pere %d commence\n",getpid());
+	if (fork()==0){
+		printf("le 1er fils %d commence\n",getpid());
+		close(tube[1]);
+		
+		
+		if (read(fic, &lu, sizeof(char))==0){
+			printf("ereur\n");
+		}
+		printf(" %d a lu %c\n",getpid(),lu);
+		read(tube[0], &lu, sizeof(char));
+		printf(" %d a lu %c\n",getpid(),lu);
+		read(tube[0], &lu, sizeof(char));
+		printf(" %d a lu %c\n",getpid(),lu);
+		printf("le fils %d se termine\n",getpid());
+		exit(EXIT_SUCCESS);
+		
+	}else{
+		wait(NULL);
+		close(tube[1]);
+		read(tube[0], &lu, sizeof(char));
+		printf(" %d a lu %c\n",getpid(),lu);
+		
+	}
+	if (fork()==0){
+		printf("le second fils %d commence\n",getpid());
+		close(tube[1]);
+		
+		
+		if (read(fic, &lu, sizeof(char))==0){
+			printf("ereur\n");
+		}
+		printf(" %d a lu %c\n",getpid(),lu);
+		read(tube[0], &lu, sizeof(char));
+		printf(" %d a lu %c\n",getpid(),lu);
+		read(tube[0], &lu, sizeof(char));
+		printf(" %d a lu %c\n",getpid(),lu);
+		printf("le fils %d se termine\n",getpid());
+		exit(EXIT_SUCCESS);
+	}
+	wait(NULL);
+	close(fic);
+	pipe(tube);
+	fic = open("compte_rendu.txt",O_RDONLY);
+	tube[0]=fic;
+	if (fork()==0){
+		printf("le troisieme fils %d commence\n",getpid());
+		
+		
+		
+		close(tube[1]);
+		if (read(tube[0], &lu, sizeof(char))==0){
+			printf("ereur\n");
+		}
+		printf(" %d a lu %c\n",getpid(),lu);
+		read(tube[0], &lu, sizeof(char));
+		printf(" %d a lu %c\n",getpid(),lu);
+		read(tube[0], &lu, sizeof(char));
+		printf(" %d a lu %c\n",getpid(),lu);
+		read(tube[0], &lu, sizeof(char));
+		printf(" %d a lu %c\n",getpid(),lu);
+		printf("le fils %d se termine\n",getpid());
+		
+		exit(EXIT_SUCCESS);
+	}
+	wait(NULL);
+	printf("le pere %d se termine\n",getpid());
+	close(fic);
+	
+	return 0;
+}
+
+
+EXERCICE 4 : INCOHERENCES DUES AUX COMMUTATIONS
+===============================================
+
+QUESTION 1 :
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include<unistd.h>
+#include <sys/wait.h>
+
+int main (int argc, char* argv []){
+	 if (fork()==0){
+		execl("./exo4a","exo4a","exo4test.txt",NULL);
+		exit(EXIT_FAILURE);
+	 }else{
+		execl("./exo4a","exo4a","exo4test.txt",NULL);
+		exit(EXIT_FAILURE);
+	 }
+	 return 0;
+ }
+
+QUESTION 2 :
+
+J'ai obtenu comme résultat inatendu une seule écriture sur le fichier exo4test.txt (j'en attendais deux que j'avais d'ailleurs certaines fois).
+On peux expliquer ce resultat. Si il y a une commutation du premier processus faisant le execl juste après le test si le fichier n'existe pas (avant l'open),
+le second processus passera aussi ce test et les deux processus seront dans la partie du code première ecriture, l'un ecrasant celle de l'autre.
+
+QUESTION 3 :
+
+exo4b.c:
+ 
+int main (int argc, char* argv []){
+	
+	 if (fork()==0){
+		execl("./exo4a","exo4a","exo4test.txt",NULL);
+		exit(EXIT_FAILURE);
+	 }
+	 return 0;
+ }
+ 
