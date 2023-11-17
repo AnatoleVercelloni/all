@@ -1,0 +1,63 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
+
+
+//We assume that matrices are vector row wise
+
+
+
+void UpperHessenberg(double *A, int n){
+	for (int i = 0; i<n; i++){
+	}
+}
+
+
+void givens_ij(double *R, double* Q, int i, int j, int m, int n){
+	double rjj = R[j*m + j];
+	double rij = R[i*m + j];
+	double x = sqrt(rjj*rjj+rij*rij);
+	double c = rjj/x;
+	double s = rij/x;
+	for (int k = 0; k < m; k++) {
+		if (k < n) {
+			R[j * m + k] = c * R[j * m + k] + s * R[i * m + k];
+			R[i * m + k] = - s * R[j * m + k] + c * R[i * m + k];
+		}
+		Q[k * m + j] = c * Q[k * m + j] + s * Q[k * m + i];
+		Q[k * m + i] = - s * Q[k * m + j] + c * Q[k * m + i];
+	}
+	return ;
+}
+
+
+void givens(double *A, double *Q, double *R, int m, int n){
+	// assume that Q = 0
+	for (int i =0; i<m; i++){
+		Q[i + i*m] = 1;
+	}
+	memcpy(R,A,m*n*sizeof(double));
+	for (int j = 0; j<n; j++){
+		for (int i = j+1; i<m; i++){
+			givens_ij(R, Q, i, j, m, n);
+		}
+	}
+	return ;
+}
+			
+	int main(int argc, char ** argv) {
+		int m = 4;
+		int n = 3;
+		double* A = {1, 8, 7, 
+					 3, 0, 2, 
+					 -57, 4, 0,
+					 1, 1, 1};
+		double* Q = {0, 0, 0, 0,
+			 		 0, 0, 0, 0, 
+					 0, 0, 0, 0, 
+					 0, 0, 0, 0};
+		double* R;
+		givens(A, Q, R, m, n);
+		return 0;
+	}

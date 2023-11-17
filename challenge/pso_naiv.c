@@ -33,6 +33,7 @@ double f(double *X, int D){
 double rand_naiv(double *v_i, int D, int LB, int UB){
 	for (int i=0; i<D; i++){
 		v_i[i] =  LB + (rand()/(RAND_MAX/(UB-LB)));
+	}
 }
 
 double best_naiv(int D, int N, double *x){
@@ -78,9 +79,9 @@ void update_xi_naiv(double *x, double *v){
 
 double pso(int N, int D, int T, int LB, int UB){
 	
-	double *v = malloc(N*sizeof(double*));
-	double *x = malloc(N*sizeof(double*));
-	double *p = malloc(N*sizeof(double*));
+	double *v[N];
+	double *x[N];
+	double *p[N];
 	
 	for (int i=0; i<N; i++){
 		
@@ -91,12 +92,12 @@ double pso(int N, int D, int T, int LB, int UB){
 		rand_naiv(x_i, D, LB, UB);
 		rand_naiv(p_i, D, LB, UB);
 		
-		v[i] = v_i;
-		x[i] = x_i;
-		p[i] = x_i;
+		v[i] = &v_i;
+		x[i] = &x_i;
+		p[i] = &x_i;
 	}
 	
-	double g = best_naiv(x) 
+	double g = best_naiv(D, N, x) 
 	int t = 1;
 	
 	while (t<=T){
@@ -110,12 +111,12 @@ double pso(int N, int D, int T, int LB, int UB){
 			update_vi_naiv(N, D, v, x, i, r_1, r_2, p, g);
 			update_xi_naiv(x, v);
 			
-			if (f(x)<f(p){
-				p = f(x);
+			if (f(x, D)<f(p, D)){
+				p = f(x, D);
 			}
 		}
 		
-		g = best_naiv(x);
+		g = best_naiv(D, N, x);
 		t = t + 1;
 	}
 	
@@ -128,7 +129,18 @@ double pso(int N, int D, int T, int LB, int UB){
 	
 	
 int main(){
+	
+	int N = 4;
+	int D = 2;
+	int T = 100;
+	int LB = 0;
+	int UB = 10;
+	
+	// printf("pso algorithm with \n \t-D = %d \n \t-N = %d \n \t-T = %d \n \t-[LB, UB]= [%d, %d] ", D, N, T? LB, UB);
 	srand(time(NULL));
+	
+	
+	// double g = pso(N, D, T, LB, UB);
 	return 0;
 }
 	

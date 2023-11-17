@@ -1,0 +1,27 @@
+#include <iostream>
+#include <vector>
+#include <cassert>
+#include <cmath>
+#include <fstream>
+#include "dense_matrix.hpp"
+#include "map_matrix.hpp"
+#include "vector.hpp"
+#include "triangular_matrix.hpp"
+
+using namespace std;
+
+
+
+int main(){
+	int n = 4;
+	vector<int> v = {0,1,2,3};
+
+	MapMatrix M0 = LoadMapMatrix("matrix.txt");
+	
+	DenseMatrix M(n,n);
+		
+	}
+	LUFactorize(M,v);
+	cout << M << endl;
+	return 0;
+}

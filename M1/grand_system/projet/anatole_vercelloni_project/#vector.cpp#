@@ -1,0 +1,76 @@
+
+
+#include "vector.hpp"
+
+using namespace std;
+
+void operator+=(vector<double> &v1, vector<double> &v2){
+	assert(v1.size() == v2.size());
+	for (int i = 0; i<v1.size(); i++){
+		v1[i] = v1[i] + v2[i];
+	}
+}
+
+void operator-=(vector<double> &v1, vector<double> &v2){
+	assert(v1.size() == v2.size());
+	for (int i = 0; i<v1.size(); i++){
+		v1[i] = v1[i] - v2[i];
+	}
+}
+
+
+vector<double> operator+(vecto
+			 r<double> &v1, vector<double> &v2){
+	vector<double> v3;
+	assert(v1.size() == v2.size());
+	for (int i = 0; i<v1.size(); i++){
+		v3.push_back(v1[i] + v2[i]);
+	}
+	return v3;
+}
+
+vector<double> operator-(vector<double> &v1, vector<double> &v2){
+	vector<double> v3;
+	assert(v1.size() == v2.size());
+	for (int i = 0; i<v1.size(); i++){
+		v3.push_back(v1[i] - v2[i]);
+	}
+	return v3;
+}
+
+double operator,(vector<double> &v1, vector<double> &v2){
+	double a = 0.0;
+	assert(v1.size() == v2.size());
+	for (int i = 0; i<v1.size(); i++){
+		a+=v1[i]*v2[i];
+	}
+	return a;
+}
+
+
+double Norm(vector<double> &v){
+	double n = 0.0;
+	for(int i = 0; i<v.size(); ++i){
+		n += v[i]*v[i];
+	}
+	return sqrt(n);
+}
+
+void operator*=(vector<double> &v, double a){
+		for (int i = 0; i<v.size(); i++){
+			v[i] = a*v[i];
+		}
+}
+
+vector<double> operator*(vector<double> &v, double a){
+	vector<double> v2;
+	for (int i = 0; i<v.size(); i++){
+			v2.push_back(a*v[i]);
+		}
+	return v2;
+}
+
+ostream &operator<<(ostream &o, vector<double> &v){
+	for (const auto& uj:v){ o << uj << "\t";}
+	return o << endl;
+}

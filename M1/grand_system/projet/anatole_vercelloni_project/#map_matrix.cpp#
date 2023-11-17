@@ -1,0 +1,122 @@
+#include<tuple>
+#include<map>
+#include "map_matrix.hpp"
+#include "vector.hpp"
+
+using namespace std;
+
+typedef tuple<int, int> NxN;
+
+MapMatrix::MapMatrix
+(const int& nr, const int &nc):
+ nr(nr), nc(nc){}
+ 
+ MapMatrix::MapMatrix
+(const MapMatrix &M):nr(M.nr), nc(M.nc), data(M.data){}
+
+MapMatrix &MapMatrix::operator=(const MapMatrix &M){
+	nr = M.nr;
+	nc = M.nc;
+	data = M.data;
+	return *this;
+}
+
+void MapMatrix::insert(const int& i, const int& j, const double& v){
+	map<NxN, double>::iterator elt;
+	tuple<int, int> t = {i,j};
+	elt = data.find(t);
+	map<NxN, double>::iterator it = data.begin();
+	if (elt==data.end()){
+		data.insert(it,{t,v});
+	}
+	else{
+		 double w = data[t]+v;
+		 data.erase(t);
+		 data.emplace(t,w);
+	}
+}
+
+
+ostream &operator<<(ostream &o, MapMatrix &M){
+	map<NxN, double>::iterator elt;
+	for (int i =0; i<M.nr; i++){
+		for (int j = 0; j< M.nc; j++){
+			map<NxN, double> data = M.data;
+			elt = data.find({i,j});
+			if (elt == data.end()){
+				o << "\t" << "0";
+			}else{
+				o << "\t" << elt->second;		
+			}
+		}
+		o << "\n";
+	}
+	return o;
+}
+
+	
+	
+MapMatrix MapMatrix::operator+(MapMatrix &M){
+	MapMatrix nM = M;
+	nM.nc = nc;
+	nM.nr = nr;
+	map<NxN, double> ndata = M.data;
+	map<NxN, double>::iterator elt;
+	for (map<NxN, double>::iterator it = data.begin(); it!=data.end(); ++it){
+		tuple<int, int> t = it->first;
+		nM.insert(get<0>(t), get<1>(t), it->second);
+	}
+	return nM;
+}
+
+void MapMatrix::operator+=(MapMatrix &M){
+	for (map<NxN, double>::iterator it = M.data.begin(); it!=M.data.end(); ++it){
+		tuple<int, int> t = it->first;
+		insert(get<0>(t), get<1>(t), it->second);
+	}
+}
+	
+	
+// MapMatrix MapMatrix::operator*(MapMatrix &M){
+	// assert(M.nr == nc);
+	// MapMatrix nM = M;
+	// for (int i = 0; i<nr; i++){
+		// for (int j = 0; j<nc ;j++){
+			// if 
+			// double a = 0.0;
+			// a = a + data[i*nc+k] * M.data[k*nc+j];
+			// ndata.push_back(a);
+		// }
+	// }
+	// nM.data = ndata;
+	// return nM;
+// }
+
+
+MapMatrix LoadMapMatrix(const string& filename){
+	ifstream file(filename);
+	MapMatrix M(3,3);
+	return M;
+	// if (file){
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{Capture d’écran 2022-11-24 182537.jpg}
+\caption{explication  explicative } mais x)
+\label{fig1}
+\end{figure}// int nc, nr;
+		// double v;
+		// int i,j;
+		// file >> nc >> nr;
+		// MapMatrix M(nc, nr);
+		// string line;
+		// while(getline(file, line)){
+			// file >> i >> j >> v;
+			// M.insert(i,j,v);
+		// }
+		// return M;
+			
+	// }else{
+		// cout << "file opening error\n";
+		// exit(1);
+	// }
+}
